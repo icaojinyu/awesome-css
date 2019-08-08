@@ -1,0 +1,114 @@
+/*
+
+1. 变量差值:
+  #{变量名称}
+
+2. scss中的运算 + - * / 需要加上()
+
+3. 定义混合: @mixin 混合名称{} 或者 @mixin 混合名称(){}
+
+4. 调用混合: @include 混合名称; 或者 @include 混合名称();
+
+5. 混合的本质: 复制粘贴;
+
+6. 在scss中,默认情况下嵌套的结构会转换成后代选择器
+   &符号 代表当前元素
+
+7. scss中的继承: 预先定义一个类,然后在另一个类中通过 @extend 类名; 实现继承
+
+8. 混合和继承的区别
+   - 混合是直接拷贝,有多少个地方用到就会拷贝多少份
+   - 继承通过并集选择器,不会拷贝,只会保留一份
+9. 条件判断: @if @else if @else 一般与混合搭配使用
+
+10. 循环
+   1). for循环
+   @for $i from 起始整数 through 结束整数 {}
+   @for $i from 起始整数 to 结束整数 {}
+   两者的区别: through包头包尾 to包头不包尾
+
+   2). while循环
+   @while (条件语句){}
+
+
+*/
+// 导入其他scss文件
+@import "triangle";
+
+// 定义混合
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 定义函数
+@function vw($px) { 
+  @return ($px / 750) * 100vw;
+}
+
+// 定义变量
+$red: #f00;
+$H: height;
+$div: ".father";
+
+// 变量插值
+#{$div} {
+  // 单行注释
+  /*多行注释*/
+  width: 300px;
+  #{$H}: 300px;
+  background: $red;
+  @include center;
+
+  .son {
+    width: 200px;
+    height: 200px;
+    background: yellow;
+    @include center;
+  }
+}
+
+.box1 {
+  // 运算
+  width: (100px - 2);
+  height: 100px;
+  background: blue;
+}
+
+.box2 {
+  width: vw(120);
+  height: vw(120);
+  background: purple;
+}
+
+.box3 {
+  @include triangle(Up, 20px, pink);
+}
+
+
+#list > li {
+  width: 100%;
+  height: 50px;
+  background: red;
+  border: 1px solid #000;
+  font-size: 16px;
+  color: #fff;
+
+  // 测试while循环
+  $j: 6;
+  @while ($j<=8) {
+    &:nth-child(#{$j}) {
+      height:100px;
+    }
+    $j: $j+1;
+  }
+
+  // 测试for循环
+  @for $i from 5 through 8 {
+    &:nth-child(#{$i}) {
+      background: blue;
+    }
+  }
+}
